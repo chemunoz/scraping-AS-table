@@ -20,25 +20,19 @@ const puppeteer = require('puppeteer');
       return (x > y) ? 1 : (x < y) ? -1 : 0;
     };
 
+    const sortByScore = (table) => {
+      return table.sort((a, b) => {
+        return cmp(
+          [-cmp(parseInt(a.puntos), parseInt(b.puntos)), cmp(a.equipo, b.equipo)],
+          [-cmp(parseInt(b.puntos), parseInt(a.puntos)), cmp(b.equipo, a.equipo)]
+        );
+      });
+    }
+
     let tablas = {
-      total: tabla.slice(0, 20).sort((a, b) => {
-        return cmp(
-          [-cmp(parseInt(a.puntos), parseInt(b.puntos)), -cmp(a.equipo, b.equipo)],
-          [-cmp(parseInt(b.puntos), parseInt(a.puntos)), -cmp(b.equipo, a.equipo)]
-        );
-      }),
-      casa: tabla.slice(20, 40).sort((a, b) => {
-        return cmp(
-          [-cmp(parseInt(a.puntos), parseInt(b.puntos)), -cmp(a.equipo, b.equipo)],
-          [-cmp(parseInt(b.puntos), parseInt(a.puntos)), -cmp(b.equipo, a.equipo)]
-        );
-      }),
-      fuera: tabla.slice(40, 60).sort((a, b) => {
-        return cmp(
-          [-cmp(parseInt(a.puntos), parseInt(b.puntos)), -cmp(a.equipo, b.equipo)],
-          [-cmp(parseInt(b.puntos), parseInt(a.puntos)), -cmp(b.equipo, a.equipo)]
-        );
-      })
+      total: sortByScore(tabla.slice(0, 20)),
+      casa: sortByScore(tabla.slice(20, 40)),
+      fuera: sortByScore(tabla.slice(40, 60))
     }
 
     Object.keys(tablas).forEach((key) => {
